@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Restaurant Menu</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
+    nav { background-color: #333; overflow: hidden; }
+    nav a { float: left; display: block; color: white; text-align: center;
+      padding: 14px 20px; text-decoration: none; }
+    nav a:hover { background-color: #ddd; color: black; }
+    header { background-color: #333; color: white; padding: 10px 0; text-align: center; }
+    .menu-section { background: white; padding: 20px; border-radius: 8px; margin: 20px auto;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 600px; }
+    .item { display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid #eee; }
+    .item span { font-size: 16px; }
+    button { background-color: #28a745; color: white; padding: 6px 12px;
+      border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background-color: #218838; }
+    #cart { background-color: #fff; padding: 15px; border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 600px; margin: 20px auto; }
+    #cart h3 { margin-top: 0; }
+    input[type="text"], input[type="tel"] { width: 100%; padding: 8px; margin: 6px 0;
+      border: 1px solid #ccc; border-radius: 4px; }
+    #message { text-align: center; font-weight: bold; margin-top: 10px; }
+    #checkout-btn { background-color: #007bff; color: white; padding: 10px 15px;
+      border: none; border-radius: 5px; cursor: pointer; }
+    #checkout-btn:hover { background-color: #0056b3; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="#" class="active">Menu</a>
+    <a href="reservation.html">Reservation</a>
+    <a href="contact.html">Contact</a>
+    <a href="order.html">Order</a>
+  </nav>
+  <header>
+    <h1>OUR MENU</h1>
+  </header>
+  <div class="menu-section">
+    <h2>Appetizers</h2>
+    <div class="item">
+      <span>Samaki wa Kukaanga - TSh 10,000</span>
+      <button class="add-to-cart" data-name="Samaki wa Kukaanga" data-price="10000">Add to Cart</button>
+    </div>
+    <div class="item">
+      <span>Chipsi na Kuku - TSh 8,000</span>
+      <button class="add-to-cart" data-name="Chipsi na Kuku" data-price="8000">Add to Cart</button>
+    </div>
+    <div class="item">
+      <span>Chipsi Mayai</span>
+      <button class="add-to-cart" data-name="Chipsi na Kuku" data-price="8000">Add to Cart</button>
+    </div>
+    <div class="item">
+      <span>Supu</span>
+      <button class="add-to-cart" data-name="Chipsi na Kuku" data-price="5000">Add to Cart</button>
+    </div>
+    <h2>Vyakula</h2>
+    <div class="item">
+      <span>Chipsi na Kuku - TSh 8,000</span>
+      <button class="add-to-cart" data-name="Chipsi na Kuku" data-price="8000">Add to Cart</button>
+    </div>
+    <div class="item">
+      <span>Wali na Maharage</span>
+      <button class="add-to-cart" data-name="Chipsi na Kuku" data-price="7000">Add to Cart</button>
+    </div>
+    <div class="item">
+      <span>Wali Nyama</span>
+      <button class="add-to-cart" data-name="Chipsi na Kuku" data-price="10000">Add to Cart</button>
+    </div>
+    <div class="item">
+      <span>Ugali na Sukuma</span>
+      <button class="add-to-cart" data-name="Chipsi na Kuku" data-price="4000">Add to Cart</button>
+    </div>
+    <div class="item">
+      <span>Ugali na Samaki</span>
+      <button class="add-to-cart" data-name="Chipsi na Kuku" data-price="4000">Add to Cart</button>
+    </div>
+    <div class="item">
+      <span>Wali na Maharage</span>
+      <button class="add-to-cart" data-name="Chipsi na Kuku" data-price="7000">Add to Cart</button>
+    </div>
+  </div>
+  <div id="cart">
+    <h3>Cart Items</h3>
+    <ul id="cart-items"></ul>
+    <p><strong>Total Cost:</strong> <span id="cart-total">TSh 0</span></p>
+    <label>Jina:</label><input type="text" id="customer-name" placeholder="Jina kamili" />
+    <label>Namba ya Simu:</label><input type="tel" id="customer-phone" placeholder="07XXXXXXXX" />
+    <button id="checkout-btn">Checkout</button>
+    <p id="message"></p>
+  </div>
+  <script>
+    let cart = [];
+    const buttons = document.querySelectorAll('.add-to-cart');
+    const cartList = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const message = document.getElementById('message');
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const name = button.getAttribute('data-name');
+        const price = parseInt(button.getAttribute('data-price'));
+        cart.push({ name, price });
+        updateCartDisplay();
+      });
+    });
+    function updateCartDisplay() {
+      cartList.innerHTML = "";
+      let total = 0;
+      cart.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} - TSh ${item.price}`;
+        cartList.appendChild(li);
+        total += item.price;
+      });
+      cartTotal.textContent = `TSh ${total}`;
+    }
+    checkoutBtn.addEventListener('click', () => {
+      const customerName = document.getElementById('customer-name').value.trim();
+      const customerPhone = document.getElementById('customer-phone').value.trim();
+      if (cart.length === 0 || !customerName || !customerPhone) {
+        message.style.color = 'red';
+        message.textContent = 'Tafadhali jaza jina, simu na bidhaa.';
+        return;
+      }
+      message.textContent = 'Inatuma oda...';
+      message.style.color = 'black';
+      const payload = {
+        customer_name: customerName,
+        customer_phone: customerPhone,
+        items: cart
+      };
+      fetch('save_order.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.status === 'success'){
+          message.style.color = 'green';
+          message.textContent = 'Order Successfully..Welcome Again!';
+          cart = [];
+          updateCartDisplay();
+          document.getElementById('customer-name').value = "";
+          document.getElementById('customer-phone').value = "";
+        } else {
+          message.style.color = 'red';
+          message.textContent = 'Imeshindikana kuhifadhi oda: ' + data.message;
+        }
+      })
+      .catch(error => {
+        message.style.color = 'red';
+        message.textContent = 'NetworK error.';
+        console.error(error);
+      });
+    });
+  </script>
+</body>
+</html>
